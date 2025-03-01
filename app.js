@@ -35,7 +35,8 @@ dotenv.config({
 const mongoURI = process.env.MONGO_URI;
 const port = process.env.PORT || 3000;
 const envMode = process.env.NODE_ENV.trim() || "PRODUCTION";
-const adminSecretKey = process.env.ADMIN_SECRET_KEY || "adsasdsdfsdfsdfd";
+const adminSecretKey =
+  process.env.ADMIN_SECRET_KEY || "c4tyicn4tc4tuy5u4tnyvu54not";
 const userSocketIDs = new Map();
 const onlineUsers = new Set();
 
@@ -49,8 +50,13 @@ cloudinary.config({
 
 const app = express();
 const server = createServer(app);
+
 const io = new Server(server, {
-  cors: corsOptions,
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  },
 });
 
 app.set("io", io);
@@ -58,7 +64,7 @@ app.set("io", io);
 // Using Middlewares Here
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/chat", chatRoute);
